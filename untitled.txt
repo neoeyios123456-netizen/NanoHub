@@ -1,21 +1,33 @@
 local player = game.Players.LocalPlayer
-
 print("Brainrot River Hub Loaded")
 
 -- Speed
 player.CharacterAdded:Connect(function(char)
-    local hum = char:WaitForChild("Humanoid")
-    hum.WalkSpeed = 50
+	local hum = char:WaitForChild("Humanoid")
+	hum.WalkSpeed = 50
 end)
 
 -- Infinite Jump
 local UIS = game:GetService("UserInputService")
 UIS.JumpRequest:Connect(function()
-    local char = player.Character
-    if char then
-        local hum = char:FindFirstChildOfClass("Humanoid")
-        if hum then
-            hum:ChangeState("Jumping")
-        end
-    end
+	local char = player.Character
+	if char then
+		local hum = char:FindFirstChildOfClass("Humanoid")
+		if hum then
+			hum:ChangeState("Jumping")
+		end
+	end
+end)
+
+-- Auto Fish
+_G.AutoFish = true
+
+spawn(function()
+	while _G.AutoFish do
+		wait(1)
+		local tool = player.Character:FindFirstChildOfClass("Tool")
+		if tool then
+			tool:Activate()
+		end
+	end
 end)
