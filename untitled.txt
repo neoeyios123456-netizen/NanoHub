@@ -1,0 +1,60 @@
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui",player.PlayerGui)
+
+local frame = Instance.new("Frame",gui)
+frame.Size = UDim2.new(0,420,0,260)
+frame.Position = UDim2.new(0.5,-210,0.3,0)
+frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+frame.BorderSizePixel = 0
+
+local title = Instance.new("TextLabel",frame)
+title.Size = UDim2.new(1,0,0,40)
+title.Text = "Nano Troll Hub"
+title.TextColor3 = Color3.new(1,1,1)
+title.BackgroundTransparency = 1
+title.TextScaled = true
+
+local function createToggle(name,pos,func)
+	local btn = Instance.new("TextButton",frame)
+	btn.Size = UDim2.new(0.9,0,0,40)
+	btn.Position = UDim2.new(0.05,0,pos,0)
+	btn.BackgroundColor3 = Color3.fromRGB(35,35,35)
+	btn.Text = name.." : OFF"
+	btn.TextColor3 = Color3.new(1,1,1)
+
+	local state=false
+	btn.MouseButton1Click:Connect(function()
+		state = not state
+		btn.Text = name.." : "..(state and "ON" or "OFF")
+		func(state)
+	end)
+end
+
+createToggle("Invisible",0.25,function(v)
+	local char = player.Character
+	if char then
+		for _,p in pairs(char:GetDescendants()) do
+			if p:IsA("BasePart") then
+				p.Transparency = v and 1 or 0
+			end
+		end
+	end
+end)
+
+createToggle("6x Speed",0.45,function(v)
+	local hum = player.Character:FindFirstChildOfClass("Humanoid")
+	if hum then
+		hum.WalkSpeed = v and 96 or 16
+	end
+end)
+
+createToggle("Infinite Jump",0.65,function(v)
+	_G.jump=v
+end)
+
+game:GetService("UserInputService").JumpRequest:Connect(function()
+	if _G.jump then
+		local hum = player.Character:FindFirstChildOfClass("Humanoid")
+		if hum then hum:ChangeState("Jumping") end
+	end
+end)
